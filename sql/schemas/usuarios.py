@@ -24,12 +24,6 @@ class UsuarioBase(BaseModel):
         example="True",
         max_length=10
     )
-    role: str = Field(
-        ...,
-        title="Rol del usuario",
-        example="admin",
-        max_length=10,
-    )
     password: str = Field(
         ...,
         title="Contraseña",
@@ -59,12 +53,6 @@ class UsuarioBaseGet(BaseModel):
         title="Estado del usuario",
         example="True",
         max_length=10
-    )
-    role: str = Field(
-        ...,
-        title="Rol del usuario",
-        example="admin",
-        max_length=10,
     )
     _password: str = Field(
         ...,
@@ -148,11 +136,16 @@ class Usuario(BaseModel):
         title="Booleando que indica si el usuario está activo o no",
         example=True
     )
+    mail: str = Field(
+        ...,
+        title="Mail del usuario",
+        example=True
+    )
     role: str = Field(
         ...,
         title="Rol del usuario",
         example="admin",
-        max_length=10,
+        max_length=20,
     )
 
 

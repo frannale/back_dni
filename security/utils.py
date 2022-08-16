@@ -90,28 +90,3 @@ def crear_token_acceso(data: dict, expires_delta: Optional[timedelta] = None):
         to_encode, config["SECRET_KEY"], algorithm=config["ALGORITHM"]
     )
     return encoded_jwt
-
-
-# Funciones necesarias de Seguridad
-async def get_usuario_actual(
-    db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
-):
-    excepcion_credenciales = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-    try:
-        payload = jwt.decode(
-            token, config["SECRET_KEY"], algorithms=[config["ALGORITHM"]]
-        )
-        username: str = payload.get("sub")
-        if username is None:
-            raise excepcion_credenciales
-        token_data = UsuarioSchema.TokenData(username=username)
-    except JWTError:
-        raise excepcion_credenciales
-    user = usuarios.get_usuario_by_nombre(db, username=token_data.username)
-    if user is None:
-        raise excepcion_credenciales
-    return user

@@ -1,5 +1,5 @@
 
-from routers import usuarios, jugador,especialista
+from routers import usuarios, jugador,especialista,registros
 from fastapi.middleware.cors import CORSMiddleware
 
 from fastapi import FastAPI
@@ -53,6 +53,7 @@ app.add_middleware(
 app.include_router(usuarios.router)
 app.include_router(jugador.router)
 app.include_router(especialista.router)
+app.include_router(registros.router)
 
 
 

@@ -97,44 +97,34 @@ async def Get_Usuarios_Registrados(
 
 
 @router.get(
-    "/usuarios/{id_usuario}",
+    "/usuarios/profile",
     response_model=UsuarioSchema.GetUsuario,
-    description="Retorna la información del usuario",
+    description="Retorna la información del usuario logueado",
     responses={
         500: {"model": ResponseSchema.MensajeError500},
         404: {"model": ResponseSchema.MensajeError404},
     },
     tags=["Usuarios"],
 )
-def Get_Usuario(
-    id_usuario: int, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
+def Get_Usuario_Profile(
+    db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
 ):
 
-    # CHEQUE TOKEN
-    logged_user = utils.check_token_user(db,token)
-    if logged_user == None:
-        return JSONResponse(
-            status_code=401,
-            content={
-                "code": 401,
-                "error": "Acceso no autorizado",
-            },
-        )
-
     try:
-        usuario = usuarios.get_usuario_by_id(db, id_usuario)
-        if usuario == None:
+        # CHEQUE TOKEN
+        logged_user = utils.check_token_user(db,token)
+        if logged_user == None:
             return JSONResponse(
-                status_code=404,
+                status_code=401,
                 content={
-                    "code": 404,
-                    "error": "Not Found - Ese ID no corresponde a un usuario registrado",
+                    "code": 401,
+                    "error": "Acceso no autorizado",
                 },
             )
         else:
             return {
                 "code": 200,
-                "usuario": usuario
+                "usuario": logged_user
             }
     except Exception as e:
         return JSONResponse(
@@ -195,9 +185,9 @@ def Delete_Usuario(
         )
 
 @router.put(
-    "/usuarios/{id_usuario}",
+    "/usuarios/edit",
     response_model=UsuarioSchema.UpdateUsuario,
-    description="Modifica un usuario",
+    description="Modifica el perfil propio del usuario",
     responses={
         500: {"model": ResponseSchema.MensajeError500},
         404: {"model": ResponseSchema.MensajeError404},
@@ -206,32 +196,22 @@ def Delete_Usuario(
 )
 def Put_Usuario(
     usuario: UsuarioSchema.UsuarioUpdate,
-    id_usuario: int, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
+    db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
 ):
 
-    # CHEQUE TOKEN
-    logged_user = utils.check_token_admin(db,token)
-    if logged_user == None:
-        return JSONResponse(
-            status_code=401,
-            content={
-                "code": 401,
-                "error": "Acceso no autorizado",
-            },
-        )
-
     try:
-        exist_usuario = usuarios.get_usuario_by_id(db, id_usuario)
-        if exist_usuario == None:
+        # CHEQUE TOKEN
+        logged_user = utils.check_token_user(db,token)
+        if logged_user == None:
             return JSONResponse(
-                status_code=404,
+                status_code=401,
                 content={
-                    "code": 404,
-                    "error": "Not Found - Ese ID no corresponde a un usuario registrado",
+                    "code": 401,
+                    "error": "Acceso no autorizado",
                 },
             )
         else:
-            updated_user = usuarios.modificar_usuario(db, id_usuario,usuario)
+            updated_user = usuarios.modificar_usuario(db, logged_user.id,usuario)
             return {
                 "code": 200,
                 "usuario": updated_user

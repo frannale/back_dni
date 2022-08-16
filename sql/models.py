@@ -48,6 +48,8 @@ class Registro(Base):
     fecha_editado = Column(DateTime)
     fecha_eliminado = Column(DateTime)
     aprobado = Column(String(20))
+    observaciones = Column(Text(1000))
+    detalle = Column(Text(10000))
     jugador_id = Column(Integer, ForeignKey('jugador.id'))
     jugador = relationship("Jugador", back_populates="registros")
     especialista_id = Column(Integer, ForeignKey('especialista.id'))

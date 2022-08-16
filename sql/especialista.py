@@ -22,6 +22,9 @@ def get_especialistas(db: Session,params):
 def get_especialista_by_id(db: Session, id_especialista: int):
     return db.query(models.Especialista).filter(models.Especialista.id == id_especialista).first()
 
+def get_especialista_by_user_id(db: Session, user_id: int):
+    return db.query(models.Especialista).filter(models.Especialista.usuario_id == user_id).first()
+
 def delete_especialista_by_id(db: Session, id_especialista: int):
     especialista = db.query(models.Especialista).filter(models.Especialista.id == id_especialista).first()
     id_usuario = especialista.usuario.id
@@ -58,16 +61,14 @@ def crear_especialista(db: Session, especialista: EspecialistaSchema.Especialist
     db.refresh(nuevo_especialista)
     return nuevo_especialista
 
-def modificar_especialista(db: Session, id_especialista: int ,especialista: EspecialistaSchema.EspecialistaCreate):
+def modificar_especialista(db: Session, id_especialista: int ,especialista: EspecialistaSchema.EspecialistaUpdate):
 
     especialista_db = db.query(models.Especialista).filter(models.Especialista.id == id_especialista).first()
     especialista_db.nombre = especialista.nombre
     especialista_db.apellido = especialista.apellido
     especialista_db.matricula = especialista.matricula
-    especialista_db.especialista = especialista.especialista
     # USER
-    usuario_db = db.query(models.Usuario).filter(models.Usuario.id == especialista.usuario.id).first()
-    # usuario_db.username = especialista.username
+    usuario_db = db.query(models.Usuario).filter(models.Usuario.id == especialista_db.usuario_id).first()
     usuario_db.mail = especialista.mail
     usuario_db.activo = especialista.activo
     if(especialista.password != ""):
