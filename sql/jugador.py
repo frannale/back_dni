@@ -17,12 +17,23 @@ def get_jugadores(db: Session,params):
     if nombre != '' :
         query = query.filter((models.Jugador.nombre + " " + models.Jugador.apellido).like("%" + nombre + "%"))
 
-    jugadores = query.order_by(models.Jugador.nombre).all()
+    jugadores = query.order_by(models.Jugador.apellido,models.Jugador.nombre).all()
 
     return jugadores
 
 def get_jugador_by_id(db: Session, id_jugador: int):
     return db.query(models.Jugador).filter(models.Jugador.id == id_jugador).first()
+
+def get_jugador_activo_by_id(db: Session, id_jugador: int):
+    return db.query(models.Jugador).filter(models.Jugador.id == id_jugador).filter(models.Jugador.activo == "True").first()
+
+    
+
+def validate_alta_jugador_by_id(db: Session, id_jugador: int):
+    registro = db.query(models.Registro).filter(models.Registro.jugador_id == id_jugador).first()
+    if registro == None:
+        return False
+    return True
 
 def delete_jugador_by_id(db: Session, id_jugador: int):
     jugador = db.query(models.Jugador).filter(models.Jugador.id == id_jugador).first()

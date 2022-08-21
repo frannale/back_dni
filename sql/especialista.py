@@ -15,7 +15,7 @@ def get_especialistas(db: Session,params):
     if nombre != '' :
         query = query.filter((models.Especialista.nombre + " " + models.Especialista.apellido).like("%" + nombre + "%"))
 
-    especialistas = query.order_by(models.Especialista.nombre).all()
+    especialistas = query.order_by(models.Especialista.apellido,models.Especialista.nombre).all()
 
     return especialistas
 

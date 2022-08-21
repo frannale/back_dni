@@ -74,6 +74,29 @@ class GetJugador(BaseModel):
     class Config:
         orm_mode = True
 
+class JugadorValidado(BaseModel):
+
+    nombre: str = Field(
+        ...,
+        title="Nombre de jugador",
+        example="Pedro",
+        max_length=200
+    )
+    apellido: str = Field(
+        ...,
+        title="Apellido de jugador",
+        example="Gomez",
+        max_length=200
+    )
+
+class GetJugadorValidado(BaseModel):
+    code: int = Field(200, const=True, title="Código de respuesta", example=200)
+    jugador: JugadorValidado
+    aprobado: str
+
+    class Config:
+        orm_mode = True
+
 class DeleteJugador(BaseModel):
     code: int = Field(200, const=True, title="Código de respuesta", example=200)
 

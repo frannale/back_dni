@@ -333,3 +333,44 @@ def Modificar_Foto(
         )
 
 
+@router.get(
+    "/validacion/{id_jugador}",
+    response_model=JugadorSchema.GetJugadorValidado,
+    description="Retorna si un jugador tiene aprobada el alta medica",
+    responses={
+        500: {"model": ResponseSchema.MensajeError500},
+        404: {"model": ResponseSchema.MensajeError404},
+    },
+    tags=["Jugadores"],
+)
+def Validate_Jugador(
+    id_jugador: int, db: Session = Depends(get_db)
+):
+        
+    try:
+        jugador = RepoJugador.get_jugador_activo_by_id(db, id_jugador)
+        if jugador == None:
+            return JSONResponse(
+                status_code=404,
+                content={
+                    "code": 404,
+                    "error": "Not Found - Ese ID no corresponde a un jugador registrado",
+                },
+            )
+        else:
+            registro = RepoJugador.validate_alta_jugador_by_id(db, id_jugador)
+            return {
+                "code": 200,
+                "aprobado": "APROBADO" if registro else "DESAPROBADO" , 
+                "jugador": jugador
+            }
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={
+                "code": 500,
+                "error": "Internal Server Error - Detalle: {0}".format(str(e)),
+            },
+        )
+
+

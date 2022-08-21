@@ -15,6 +15,16 @@ class Especialista(BaseModel):
     id: int
     nombre: str
     apellido: str
+    especialidad: str
+
+    class Config:
+        orm_mode = True
+
+class Jugador(BaseModel):
+    id: int
+    nombre: str
+    apellido: str
+    dni: str
 
     class Config:
         orm_mode = True
@@ -58,6 +68,7 @@ class RegistroGet(Registro):
         example="2021-08-19",
     )
     especialista: Especialista
+    jugador: Jugador
 
     class Config:
         orm_mode = True
