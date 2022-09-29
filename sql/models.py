@@ -30,6 +30,7 @@ class Jugador(Base):
     __tablename__ = "jugador"
 
     id = Column(Integer, primary_key=True, index=True)
+    disciplina = Column(String(30), nullable=False)
     nombre = Column(String(30), nullable=False)
     apellido = Column(String(30), nullable=False)
     dni = Column(String(20), nullable=False)

@@ -1,8 +1,5 @@
-from typing import List, Optional, Dict
-from xmlrpc.client import Boolean
-
+from typing import List, Optional
 from pydantic import BaseModel, Field
-
 
 class UsuarioBase(BaseModel):
 

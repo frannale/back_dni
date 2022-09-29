@@ -334,7 +334,7 @@ def Modificar_Foto(
 
 
 @router.get(
-    "/validacion/{id_jugador}",
+    "/validacion/{dni_jugador}",
     response_model=JugadorSchema.GetJugadorValidado,
     description="Retorna si un jugador tiene aprobada el alta medica",
     responses={
@@ -344,11 +344,11 @@ def Modificar_Foto(
     tags=["Jugadores"],
 )
 def Validate_Jugador(
-    id_jugador: int, db: Session = Depends(get_db)
+    dni_jugador: int, db: Session = Depends(get_db)
 ):
         
     try:
-        jugador = RepoJugador.get_jugador_activo_by_id(db, id_jugador)
+        jugador = RepoJugador.get_jugador_activo_by_dni(db, dni_jugador)
         if jugador == None:
             return JSONResponse(
                 status_code=404,
@@ -358,10 +358,10 @@ def Validate_Jugador(
                 },
             )
         else:
-            registro = RepoJugador.validate_alta_jugador_by_id(db, id_jugador)
+            registro = RepoJugador.validate_alta_jugador_by_id(db, jugador.dni)
             return {
                 "code": 200,
-                "aprobado": "APROBADO" if registro else "DESAPROBADO" , 
+                "aprobado": "APTO" if registro else "NO APTO" , 
                 "jugador": jugador
             }
     except Exception as e:

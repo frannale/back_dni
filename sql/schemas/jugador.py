@@ -12,6 +12,12 @@ class Jugador(BaseModel):
         example="Pedro",
         max_length=200
     )
+    disciplina: str = Field(
+        ...,
+        title="Disciplina del jugador",
+        example="Futbol",
+        max_length=200
+    )
     nombre: str = Field(
         ...,
         title="Nombre de jugador",
@@ -88,6 +94,10 @@ class JugadorValidado(BaseModel):
         example="Gomez",
         max_length=200
     )
+    filename: str
+
+    class Config:
+        orm_mode = True
 
 class GetJugadorValidado(BaseModel):
     code: int = Field(200, const=True, title="Código de respuesta", example=200)

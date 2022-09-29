@@ -1,5 +1,5 @@
 import datetime
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -57,7 +57,6 @@ class Registro(BaseModel):
     )
 
 class RegistroCreate(Registro):
-
     pass
 
 class RegistroGet(Registro):
@@ -80,12 +79,9 @@ class RegistroGetOne(Registro):
         title="Fecha de carga registro",
         example="2021-08-19",
     )
-    fecha_editado: datetime.datetime = Field(
-        ...,
-        title="Ultima fecha edicion registro",
-        example="2021-08-19",
-    )
-    imagenes: List[ImagenRegistro]
+    especialista: Especialista
+    jugador: Jugador
+    imagenes: Optional[ List[ImagenRegistro]]
 
     class Config:
         orm_mode = True

@@ -24,8 +24,8 @@ def get_jugadores(db: Session,params):
 def get_jugador_by_id(db: Session, id_jugador: int):
     return db.query(models.Jugador).filter(models.Jugador.id == id_jugador).first()
 
-def get_jugador_activo_by_id(db: Session, id_jugador: int):
-    return db.query(models.Jugador).filter(models.Jugador.id == id_jugador).filter(models.Jugador.activo == "True").first()
+def get_jugador_activo_by_dni(db: Session, dni_jugador: int):
+    return db.query(models.Jugador).filter(models.Jugador.dni == dni_jugador).filter(models.Jugador.activo == "True").first()
 
     
 
@@ -45,6 +45,7 @@ def delete_jugador_by_id(db: Session, id_jugador: int):
 def crear_jugador(db: Session, jugador: JugadorSchema.JugadorCreate):
     nueva_jugador = models.Jugador(
         dni= jugador.dni, 
+        disciplina= jugador.disciplina,
         nombre= jugador.nombre,
         apellido= jugador.apellido,
         activo= jugador.activo,
@@ -61,6 +62,7 @@ def crear_jugador(db: Session, jugador: JugadorSchema.JugadorCreate):
 def modificar_jugador(db: Session, id_jugador: int ,jugador: JugadorSchema.JugadorCreate):
 
     jugador_db = db.query(models.Jugador).filter(models.Jugador.id == id_jugador).first()
+    jugador_db.disciplina = jugador.disciplina
     jugador_db.nombre = jugador.nombre
     jugador_db.apellido = jugador.apellido
     jugador_db.nombre_responsable = jugador.nombre_responsable
