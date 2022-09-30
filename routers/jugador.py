@@ -358,7 +358,7 @@ def Validate_Jugador(
                 },
             )
         else:
-            registro = RepoJugador.validate_alta_jugador_by_id(db, jugador.dni)
+            registro = RepoJugador.validate_alta_jugador_by_id(db, jugador.id)
             return {
                 "code": 200,
                 "aprobado": "APTO" if registro else "NO APTO" , 

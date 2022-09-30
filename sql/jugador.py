@@ -27,10 +27,8 @@ def get_jugador_by_id(db: Session, id_jugador: int):
 def get_jugador_activo_by_dni(db: Session, dni_jugador: int):
     return db.query(models.Jugador).filter(models.Jugador.dni == dni_jugador).filter(models.Jugador.activo == "True").first()
 
-    
-
 def validate_alta_jugador_by_id(db: Session, id_jugador: int):
-    registro = db.query(models.Registro).filter(models.Registro.jugador_id == id_jugador).first()
+    registro = db.query(models.Registro).filter(models.Registro.jugador_id == id_jugador).join(models.Especialista).filter(models.Especialista.especialidad == "CARDIOLOGIA").first()
     if registro == None:
         return False
     return True
