@@ -31,6 +31,7 @@ class Jugador(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     disciplina = Column(String(30), nullable=False)
+    club = Column(String(30), nullable=False)
     nombre = Column(String(30), nullable=False)
     apellido = Column(String(30), nullable=False)
     dni = Column(String(20), nullable=False)
@@ -40,6 +41,12 @@ class Jugador(Base):
     filename = Column(Text(4294000000))
     activo = Column(String(20), nullable=False)
     registros = relationship("Registro", back_populates="jugador")
+
+registro_imagen_table = Table('mm_registro_imagen', Base.metadata,
+    Column("id", Integer, primary_key=True),
+    Column('registro_id', ForeignKey('registro.id')),
+    Column('imagen_id', ForeignKey('imagen_registro.id'))
+) 
 
 class Registro(Base):
     __tablename__ = "registro"
@@ -55,3 +62,11 @@ class Registro(Base):
     jugador = relationship("Jugador", back_populates="registros")
     especialista_id = Column(Integer, ForeignKey('especialista.id'))
     especialista = relationship("Especialista", back_populates="registros")
+    imagenes = relationship("ImagenRegistro", secondary=registro_imagen_table, back_populates="registros")
+
+class ImagenRegistro(Base):
+    __tablename__ = "imagen_registro"
+
+    id = Column(Integer, primary_key=True, index=True)
+    file = Column(Text(4294000000), nullable=False)
+    registros = relationship("Registro",secondary=registro_imagen_table, back_populates="imagenes")

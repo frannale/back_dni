@@ -18,6 +18,12 @@ class Jugador(BaseModel):
         example="Futbol",
         max_length=200
     )
+    club: str = Field(
+        ...,
+        title="Club del jugador",
+        example="Futbol",
+        max_length=200
+    )
     nombre: str = Field(
         ...,
         title="Nombre de jugador",

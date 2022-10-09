@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: api-iola
+    image: api-iola:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9080:80"

@@ -44,6 +44,7 @@ def crear_jugador(db: Session, jugador: JugadorSchema.JugadorCreate):
     nueva_jugador = models.Jugador(
         dni= jugador.dni, 
         disciplina= jugador.disciplina,
+        club= jugador.club,
         nombre= jugador.nombre,
         apellido= jugador.apellido,
         activo= jugador.activo,
@@ -61,6 +62,7 @@ def modificar_jugador(db: Session, id_jugador: int ,jugador: JugadorSchema.Jugad
 
     jugador_db = db.query(models.Jugador).filter(models.Jugador.id == id_jugador).first()
     jugador_db.disciplina = jugador.disciplina
+    jugador_db.club = jugador.club
     jugador_db.nombre = jugador.nombre
     jugador_db.apellido = jugador.apellido
     jugador_db.nombre_responsable = jugador.nombre_responsable

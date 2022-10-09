@@ -64,7 +64,12 @@ class UsuarioCreate(UsuarioBase):
     pass
 
 class UsuarioUpdate(UsuarioBase):
-    pass
+    userMail: str = Field(
+        ...,
+        title="Email del usuario",
+        example="usuario@gmail.com",
+        max_length=100,
+    )
 
 
 class Usuario(UsuarioBaseGet):

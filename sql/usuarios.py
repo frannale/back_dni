@@ -52,10 +52,10 @@ def crear_usuario(db: Session, usuario: UsuarioSchema.UsuarioCreate):
     db.refresh(nuevo_usuario)
     return nuevo_usuario
 
-def modificar_usuario(db: Session, id_usuario: int ,usuario: UsuarioSchema.UsuarioCreate):
+def modificar_usuario(db: Session, id_usuario: int ,usuario: UsuarioSchema.UsuarioUpdate):
 
     usuario_db = db.query(models.Usuario).filter(models.Usuario.id == id_usuario).first()
-    usuario_db.mail = usuario.mail
+    usuario_db.mail = usuario.userMail
     if(usuario.password != ""):
         usuario_db.password= utils.get_hash_password(usuario.password)
     
