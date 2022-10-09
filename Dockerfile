@@ -12,16 +12,14 @@ COPY ./requirements.txt /app/requirements.txt
 RUN apt-get update
 RUN apt-get -y install curl
 RUN apt-get -y install python3-pip
-RUN apt-get -y install unixodbc-dev
+RUN apt install python3-pip python3-dev unixodbc-dev
+RUN pip3 install --user pyodbc
 RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
 
 # 
 COPY ./ /app
 
 EXPOSE 80
-
-HEALTHCHECK  --interval=1m --timeout=5s \
-  CMD curl --fail http://localhost:80/cursos || exit 1
 
 # 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
