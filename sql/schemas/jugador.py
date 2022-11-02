@@ -59,6 +59,12 @@ class Jugador(BaseModel):
         example="True",
         max_length=20
     )
+    obra_social: str = Field(
+        ...,
+        title="Estado activo de la jugador",
+        example="True",
+        max_length=20
+    )
 
 class JugadorCreate(Jugador):
     pass

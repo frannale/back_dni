@@ -28,7 +28,7 @@ def get_jugador_activo_by_dni(db: Session, dni_jugador: int):
     return db.query(models.Jugador).filter(models.Jugador.dni == dni_jugador).filter(models.Jugador.activo == "True").first()
 
 def validate_alta_jugador_by_id(db: Session, id_jugador: int):
-    registro = db.query(models.Registro).filter(models.Registro.jugador_id == id_jugador).join(models.Especialista).filter(models.Especialista.especialidad == "CARDIOLOGIA").first()
+    registro = db.query(models.Registro).filter(models.Registro.jugador_id == id_jugador).join(models.Especialista).filter(models.Especialista.especialidad == "CLINICA MEDICA").first()
     if registro == None:
         return False
     return True
@@ -47,6 +47,7 @@ def crear_jugador(db: Session, jugador: JugadorSchema.JugadorCreate):
         club= jugador.club,
         nombre= jugador.nombre,
         apellido= jugador.apellido,
+        obra_social= jugador.obra_social,
         activo= jugador.activo,
         nombre_responsable= jugador.nombre_responsable,
         telefono_responsable= jugador.telefono_responsable,
@@ -61,6 +62,8 @@ def crear_jugador(db: Session, jugador: JugadorSchema.JugadorCreate):
 def modificar_jugador(db: Session, id_jugador: int ,jugador: JugadorSchema.JugadorCreate):
 
     jugador_db = db.query(models.Jugador).filter(models.Jugador.id == id_jugador).first()
+    jugador_db.dni = jugador.dni
+    jugador_db.obra_social = jugador.obra_social
     jugador_db.disciplina = jugador.disciplina
     jugador_db.club = jugador.club
     jugador_db.nombre = jugador.nombre

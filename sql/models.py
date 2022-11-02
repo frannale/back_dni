@@ -40,6 +40,7 @@ class Jugador(Base):
     fecha_nacimiento = Column(DateTime)
     filename = Column(Text(4294000000))
     activo = Column(String(20), nullable=False)
+    obra_social = Column(String(40), nullable=False)
     registros = relationship("Registro", back_populates="jugador")
 
 registro_imagen_table = Table('mm_registro_imagen', Base.metadata,

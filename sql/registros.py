@@ -5,14 +5,18 @@ from sqlalchemy.orm import Session
 from . import models
 from .schemas import registros as RegistroSchema
 
-def get_registros(db: Session,params):
+def get_registros(db: Session,params,logged_user):
     
     especialista_id= params.get('especialista_id','0')
     jugador_id= params.get('jugador_id','0')
     fecha_inicio = params.get('fecha_inicio','0')
     fecha_fin = params.get('fecha_fin','0')
 
-    query = db.query(models.Registro)
+    if(logged_user.role == 'True' or logged_user.role == 'CLINICA MEDICA'):
+        query = db.query(models.Registro)
+    else:
+      query = db.query(models.Registro).join(models.Especialista).join(models.Usuario).filter(models.Usuario.id == logged_user.id)
+      
     if(especialista_id != '0'):
         query = query.filter(models.Registro.especialista_id == especialista_id)
 

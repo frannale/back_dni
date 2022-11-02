@@ -55,6 +55,7 @@ async def Get_Registros(
 
     # CHEQUE TOKEN
     logged_user = utils.check_token_user(db,token)
+    
     if logged_user == None:
         return JSONResponse(
             status_code=401,
@@ -67,7 +68,7 @@ async def Get_Registros(
     try:
 
         registro = paginate( 
-            RepoRegistro.get_registros(db,request.query_params),params
+            RepoRegistro.get_registros(db,request.query_params,logged_user),params
         )
         return {"code": 200, "registros": registro}
     except Exception as e:

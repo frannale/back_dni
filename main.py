@@ -11,7 +11,6 @@ models.Base.metadata.create_all(bind=engine)
 
 description = """
 API DNI DEPORTIVO
-
 """
 
 tags_metadata = [
@@ -35,10 +34,7 @@ app = FastAPI(
 )
 
 origins = [
-    "*",
-    "http://localhost",
-    "http://localhost:3000",
-    "http://localhost:3001",
+    "*"
 ]
 
 app.add_middleware(
