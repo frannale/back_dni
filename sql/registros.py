@@ -8,6 +8,7 @@ from .schemas import registros as RegistroSchema
 def get_registros(db: Session,params,logged_user):
     
     especialista_id= params.get('especialista_id','0')
+    estado = params.get('estado','0')
     jugador_id= params.get('jugador_id','0')
     fecha_inicio = params.get('fecha_inicio','0')
     fecha_fin = params.get('fecha_fin','0')
@@ -19,6 +20,9 @@ def get_registros(db: Session,params,logged_user):
       
     if(especialista_id != '0'):
         query = query.filter(models.Registro.especialista_id == especialista_id)
+
+    if(estado != '0'):
+        query = query.filter(models.Registro.aprobado != "True")
 
     if(jugador_id != '0'):
         query = query.filter(models.Registro.jugador_id == jugador_id)
@@ -77,4 +81,16 @@ def modificar_files(db: Session, id_registro: int ,files):
     db.commit()
     db.refresh(registro_db)
     return registro_db
+
+def modificar_resultado(db: Session, id_registro: int):
+
+    registro_db = db.query(models.Registro).filter(models.Registro.id == id_registro).first()
+
+    registro_db.aprobado = "True"
+    registro_db.fecha_editado = datetime.now(),
+
+    db.commit()
+    db.refresh(registro_db)
+    return registro_db
+
 

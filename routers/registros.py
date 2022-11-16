@@ -234,6 +234,63 @@ def Crear_Nuevo_Registro(
             },
         )
 
+
+
+@router.post(
+    "/registros/update/{id_registro}",
+    status_code=200,
+    description="Modifica el resultado de un registro",
+    response_model=RegistroSchema.CrearRegistro,
+    responses={
+        500: {"model": ResponseSchema.MensajeError500},
+        409: {"model": ResponseSchema.MensajeErrorGenerico},
+    },
+    tags=["Registros"],
+)
+def Modificar_Resultado(
+    id_registro: int,
+    db: Session = Depends(get_db),
+    token: str = Depends(oauth2_scheme),
+):
+
+    # CHEQUE TOKEN
+    logged_user = utils.check_token_user(db,token)
+    if logged_user == None:
+        return JSONResponse(
+            status_code=401,
+            content={
+                "code": 401,
+                "error": "Acceso no autorizado",
+            },
+        )
+
+    try:
+        exist_registro = RepoRegistro.get_registro_by_id(db, id_registro)
+        if exist_registro == None:
+            return JSONResponse(
+                status_code=404,
+                content={
+                    "code": 404,
+                    "error": "No existe - Ese ID no corresponde a un estudio",
+                },
+            )
+        else:
+            RepoRegistro.modificar_resultado(db, id_registro)
+            return {
+                "code": 201,
+                "registro_id": id_registro
+            }
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={
+                "code": 500,
+                "error": "Internal Server Error - Detalle: {0}".format(str(e)),
+            },
+        )
+
+
+
 @router.post(
     "/registros/files/{id_registro}",
     status_code=201,

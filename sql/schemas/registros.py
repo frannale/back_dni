@@ -79,6 +79,11 @@ class RegistroGetOne(Registro):
         title="Fecha de carga registro",
         example="2021-08-19",
     )
+    fecha_editado: Optional[datetime.datetime] = Field(
+        ...,
+        title="Fecha de edicion registro",
+        example="2021-08-19",
+    )
     especialista: Especialista
     jugador: Jugador
     imagenes: Optional[ List[ImagenRegistro]]

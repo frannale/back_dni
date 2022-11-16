@@ -106,6 +106,12 @@ class JugadorValidado(BaseModel):
         example="Gomez",
         max_length=200
     )
+    dni: str = Field(
+        ...,
+        title="DNI de jugador",
+        example="Gomez",
+        max_length=200
+    )
     filename: str
 
     class Config:
