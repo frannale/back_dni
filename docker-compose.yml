@@ -2,8 +2,8 @@ version: "3.8"
 
 services:
   app:
-    container_name: api-iola
-    image: api-iola:latest
+    container_name: api-dni
+    image: api-dni:latest
     build:
       context: .
       dockerfile: Dockerfile

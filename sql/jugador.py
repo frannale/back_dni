@@ -52,6 +52,10 @@ def crear_jugador(db: Session, jugador: JugadorSchema.JugadorCreate):
         nombre_responsable= jugador.nombre_responsable,
         telefono_responsable= jugador.telefono_responsable,
         fecha_nacimiento= jugador.fecha_nacimiento,
+        fecha_vencimiento_dni= jugador.fecha_vencimiento_dni,
+        nro_tramite_dni= jugador.nro_tramite_dni,
+        nro_pasaporte= jugador.nro_pasaporte,
+        posicion= jugador.posicion,
         filename=""
     )
     db.add(nueva_jugador)
@@ -72,6 +76,10 @@ def modificar_jugador(db: Session, id_jugador: int ,jugador: JugadorSchema.Jugad
     jugador_db.telefono_responsable = jugador.telefono_responsable
     jugador_db.fecha_nacimiento = jugador.fecha_nacimiento
     jugador_db.activo = jugador.activo
+    jugador_db.fecha_vencimiento_dni = jugador.fecha_vencimiento_dni
+    jugador_db.nro_tramite_dni = jugador.nro_tramite_dni
+    jugador_db.nro_pasaporte = jugador.nro_pasaporte
+    jugador_db.posicion = jugador.posicion
     
     db.commit()
     db.refresh(jugador_db)

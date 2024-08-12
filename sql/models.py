@@ -38,8 +38,12 @@ class Jugador(Base):
     nombre_responsable = Column(String(30), nullable=False)
     telefono_responsable = Column(String(30), nullable=False)
     fecha_nacimiento = Column(DateTime)
+    fecha_vencimiento_dni = Column(DateTime)
     filename = Column(Text(4294000000))
     activo = Column(String(20), nullable=False)
+    nro_pasaporte = Column(String(40), nullable=False)
+    nro_tramite_dni = Column(String(40), nullable=False)
+    posicion = Column(String(40), nullable=False)
     obra_social = Column(String(40), nullable=False)
     registros = relationship("Registro", back_populates="jugador")
 

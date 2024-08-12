@@ -53,6 +53,29 @@ class Jugador(BaseModel):
         title="Telefono del responsable",
         example="2021-08-19",
     )
+    fecha_vencimiento_dni: datetime.date = Field(
+        ...,
+        title="Fecha vencimiento DNI",
+        example="2021-08-19",
+    )
+    nro_tramite_dni: str = Field(
+        ...,
+        title="Numero tramite DNI",
+        example="True",
+        max_length=50
+    )
+    nro_pasaporte: str = Field(
+        ...,
+        title="Numero pasaporte",
+        example="True",
+        max_length=50
+    )
+    posicion: str = Field(
+        ...,
+        title="Posicion de jugador",
+        example="True",
+        max_length=50
+    )
     activo: str = Field(
         ...,
         title="Estado activo de la jugador",
