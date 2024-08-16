@@ -21,7 +21,10 @@ def get_registros(db: Session,params,logged_user):
     if(especialista_id != '0'):
         query = query.filter(models.Registro.especialista_id == especialista_id)
 
-    if(estado != '0'):
+    if(estado == 'APTO'):
+        query = query.filter(models.Registro.aprobado == "True")
+
+    if(estado == 'REEVALUAR'):
         query = query.filter(models.Registro.aprobado != "True")
 
     if(jugador_id != '0'):

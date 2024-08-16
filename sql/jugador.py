@@ -6,18 +6,32 @@ from sqlalchemy import or_
 
 import base64
 
-def get_jugadores(db: Session,params):
-    
-    inactivos= params.get('inactivos','False')
-    nombre= params.get('nombre','')
+def get_jugadores(db: Session, params):
+    inactivos = params.get('inactivos', 'False')
+    nombre = params.get('nombre', '')
+    estado = params.get('estado', '0')  # Nuevo parámetro para filtrar por estudios aprobados
 
+    # Iniciar la consulta base
     query = db.query(models.Jugador)
-    if inactivos == 'False' :
+
+    # Filtrar jugadores activos o inactivos
+    if inactivos == 'False':
         query = query.filter(models.Jugador.activo == 'True')
-    if nombre != '' :
+
+    # Filtrar por nombre (nombre completo)
+    if nombre != '':
         query = query.filter((models.Jugador.nombre + " " + models.Jugador.apellido).like("%" + nombre + "%"))
 
-    jugadores = query.order_by(models.Jugador.apellido,models.Jugador.nombre).all()
+    if estado == 'APTO':
+        # Filtrar jugadores que tienen al menos un registro aprobado
+        query = query.join(models.Registro).filter(models.Registro.aprobado == 'True')
+    elif estado == 'REEVALUAR':
+        # Filtrar jugadores que no tienen ningún registro aprobado
+        subquery = db.query(models.Registro.jugador_id).filter(models.Registro.aprobado == 'True').distinct()
+        query = query.filter(~models.Jugador.id.in_(subquery))
+
+    # Ordenar por apellido y nombre
+    jugadores = query.order_by(models.Jugador.apellido, models.Jugador.nombre).all()
 
     return jugadores
 
@@ -27,11 +41,13 @@ def get_jugador_by_id(db: Session, id_jugador: int):
 def get_jugador_activo_by_dni(db: Session, dni_jugador: int):
     return db.query(models.Jugador).filter(models.Jugador.dni == dni_jugador).filter(models.Jugador.activo == "True").first()
 
-def validate_alta_jugador_by_id(db: Session, id_jugador: int):
-    registro = db.query(models.Registro).filter(models.Registro.jugador_id == id_jugador).join(models.Especialista).filter(models.Especialista.especialidad == "CLINICA MEDICA").first()
-    if registro == None:
-        return False
-    return True
+def validate_alta_jugador_by_id(db: Session, id_jugador: int) -> bool:
+    return db.query(models.Registro) \
+        .filter(
+            models.Registro.jugador_id == id_jugador,
+            models.Registro.aprobado == "True"  # Verificar que el registro esté aprobado
+        ) \
+        .first() is not None
 
 def delete_jugador_by_id(db: Session, id_jugador: int):
     jugador = db.query(models.Jugador).filter(models.Jugador.id == id_jugador).first()
